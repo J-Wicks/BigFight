@@ -1,7 +1,7 @@
 import 'pixi';
 import 'p2';
 import 'phaser';
-import {createPlayer, showInventory} from './player'
+import {createPlayer, showInventory, attack} from './player'
 import pkg from '../package.json';
 import {collectWeapon, equipWeapon} from './weapons'
 
@@ -46,11 +46,12 @@ function create() {
   game.add.text(game.world.centerX, game.world.centerY * 0.8, `Welcome to Big Fight`, { font: "bold 19px Arial", fill: "#fff" })
   ];
   
+  this.attacks = game.add.group();
   this.weapons = game.add.group();
   this.weapons.enableBody = true;
   this.platforms = game.add.group();
   this.reticle = game.add.group();
-  
+
   const ground = this.platforms.create(0, game.world.height - 50, 'bottombar');
   const sword = this.weapons.create(0, 0, 'sword')
   const axe = this.weapons.create(game.world.centerX * 2 - 100, 0, 'axe')
@@ -78,21 +79,35 @@ function create() {
   player.animations.add('right', [4, 5], 10, true)
   player.animations.add('down', [0, 1], 10, true)
   player.animations.add('up', [6, 7], 10, true)
- 
-  this.cursors = game.input.keyboard.createCursorKeys();
 
+  this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+  this.cursors = game.input.keyboard.createCursorKeys();
+  game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
+  
 }
 
 function update() {
     const player = this.player
     const cursors = this.cursors
     const platforms = this.platforms
+    var spaceDown = false
 
     game.physics.arcade.collide(player, platforms)
     game.physics.arcade.overlap(player, this.weapons, collectWeapon, null, this);
     showInventory(this);
     player.body.velocity.x = 0;
     player.body.velocity.y = 0;
+
+    if (this.spaceKey.isUp){
+      spaceDown = false
+    }
+    if (!spaceDown){
+      if (this.spaceKey.isDown){
+        attack(this)
+        spaceDown = true
+      }
+    }
+
 
     if (cursors.left.isDown)
     {

@@ -1,5 +1,5 @@
 import {equipWeapon} from './weapons'
-
+let hasAttacked = false
 export const createPlayer = function(game){
 	const player = game.add.sprite(game.world.centerX, game.world.centerY,'cloud')
 	player.inventory = [];
@@ -20,4 +20,17 @@ export const showInventory = function(game){
 		inventoryItem.events.onInputDown.add( function() { equipWeapon(game.player, item)}, this)
 		return inventoryItem
 	})
+}
+
+export const attack = function(game){
+	const player = game.player
+	if(!hasAttacked){
+		game.attacks.create(game.player.x + 20, game.player.y, player.equippedWeapon.name)
+		hasAttacked = true
+	}
+
+	setTimeout(function(){
+		hasAttacked = false
+		game.attacks.removeAll()
+	}, 500)
 }
