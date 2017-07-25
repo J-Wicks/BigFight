@@ -22,7 +22,6 @@ export const collectWeapon = function(player, weapon) {
 	const newWeapon = weaponStats.filter( equipment => { 
 		return equipment.name === weapon.key;
 	});
-
 	player.equippedWeapon.name ? null : 	equipWeapon(player, newWeapon[0])
 	
 	player.inventory.push(newWeapon[0])

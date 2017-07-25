@@ -1,1 +1,0 @@
-// creating components and attaching callback functionthis.cfg = this.add.sprite(0, 0, 'cfg');this.cfg.name = 'cfg'this.cfg.inputEnabled = true;this.cfg.events.onInputUp.add(this.onControlClicked, this);this.sound = this.add.sprite(0, 0, 'sound');this.sound.name = 'sound'this.sound.inputEnabled = true;this.sound.events.onInputUp.add(this.onControlClicked, this);
